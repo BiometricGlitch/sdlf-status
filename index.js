@@ -1184,57 +1184,6 @@ function getReconnectDelay() {
   return delay + jitter;
 }
 
-// function generateUsername() {
-//   const prefixes = [
-//     "Si", "Ang", "Kuya", "Ate", "Boss", "Lods",
-//     "Tropa", "Geng", "Astig", "Solid", "Chill",
-//     "Aral", "Tambay", "Kanto", "Barkada"
-//   ];
-
-//   const names = [
-//     "Jun", "Mark", "Jhay", "Jhon", "Josh",
-//     "Kyle", "Ken", "Carl", "Ivan", "Renz",
-//     "Migz", "Bry", "Sean", "Nico", "Paolo"
-//   ];
-
-//   const vibes = [
-//     "Tambay", "Grind", "Miner", "Builder",
-//     "Pvper", "Lowkey", "Highkey", "Crush",
-//     "MissKonasya", "StudyFirst", "WalangTulugan",
-//     "NoSleep", "Gamer", "Idle"
-//   ];
-
-//   const suffixes = [
-//     "PH", "XD", "GG", "123", "Real",
-//     "Legit", "Boss", "Alt", "Main", "FR"
-//   ];
-
-//   const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-//   // Pattern variations (para hindi halatang bot)
-//   const patterns = [
-//     () => rand(prefixes) + rand(names),
-//     () => rand(names) + rand(vibes),
-//     () => rand(prefixes) + rand(vibes),
-//     () => rand(names) + "_" + rand(vibes),
-//     () => rand(vibes) + rand(suffixes),
-//     () => rand(prefixes) + rand(names) + rand(suffixes),
-//     () => rand(names) + rand(suffixes),
-//   ];
-
-//   let name = rand(patterns)();
-
-//   // Clean invalid chars
-//   name = name.replace(/[^a-zA-Z0-9_]/g, "");
-
-//   // Limit to 16 chars (Minecraft limit)
-//   if (name.length > 16) {
-//     name = name.substring(0, 16);
-//   }
-
-//   return name;
-// }
-
 function createBot() {
   if (isReconnecting) {
     addLog("[Bot] Already reconnecting, skipping...");
@@ -1263,14 +1212,8 @@ function createBot() {
       config.server.version && config.server.version.trim() !== ""
         ? config.server.version
         : false;
-
-    // const randomUsername = generateUsername();
-
-    // addLog(`[Session] Generated username: ${randomUsername}`);
-    
     bot = mineflayer.createBot({
       username: config["bot-account"].username,
-      // username: randomUsername,
       password: config["bot-account"].password || undefined,
       auth: config["bot-account"].type,
       host: config.server.ip,
@@ -1324,36 +1267,6 @@ function createBot() {
           0x4ade80,
         );
       }
-
-      addLog(`${username} joined the server`);
-
-      const messages = config.utils["chat-messages"].messages;
-    
-      if (!messages || messages.length === 0) {
-        addLog("No messages found in config.");
-        return;
-      }
-    
-      // ✅ SEND ONE MESSAGE IMMEDIATELY (after small delay)
-      setTimeout(() => {
-        const msg = messages[Math.floor(Math.random() * messages.length)];
-        bot.chat(msg);
-        addLog(`Sent (join): ${msg}`);
-      }, 3000);
-    
-      // ✅ CLEAR OLD INTERVAL IF EXISTS (VERY IMPORTANT)
-      if (bot._chatInterval) {
-        clearInterval(bot._chatInterval);
-      }
-    
-      // ✅ SPAM EVERY 10 SECONDS (randomized messages)
-      bot._chatInterval = setInterval(() => {
-        if (!bot || !bot.player) return;
-    
-        const msg = messages[Math.floor(Math.random() * messages.length)];
-        bot.chat(msg);
-        addLog(`Sent: ${msg}`);
-      }, 10000);
 
       // FIX: use bot.version (auto-detected) instead of config value so minecraft-data always matches
       const mcData = require("minecraft-data")(bot.version);
