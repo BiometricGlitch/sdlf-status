@@ -1264,9 +1264,9 @@ function createBot() {
         ? config.server.version
         : false;
 
-    const randomUsername = generateUsername();
+    // const randomUsername = generateUsername();
 
-    addLog(`[Session] Generated username: ${randomUsername}`);
+    // addLog(`[Session] Generated username: ${randomUsername}`);
     
     bot = mineflayer.createBot({
       username: config["bot-account"].username,
