@@ -1460,7 +1460,7 @@ function initializeModules(bot, mcData, defaultMove) {
       messages.forEach((msg, idx) => {
         setTimeout(() => {
           if (bot && botState.connected) bot.chat(msg);
-        }, idx * 1000);
+        }, idx);
       });
     }
   }
