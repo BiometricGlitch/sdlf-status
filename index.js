@@ -1268,8 +1268,8 @@ function createBot() {
     addLog(`[Session] Generated username: ${randomUsername}`);
     
     bot = mineflayer.createBot({
-      // username: config["bot-account"].username,
-      username: randomUsername,
+      username: config["bot-account"].username,
+      // username: randomUsername,
       password: config["bot-account"].password || undefined,
       auth: config["bot-account"].type,
       host: config.server.ip,
