@@ -1447,17 +1447,32 @@ function initializeModules(bot, mcData, defaultMove) {
   // ---------- CHAT MESSAGES ----------
   if (config.utils["chat-messages"] && config.utils["chat-messages"].enabled) {
     const messages = config.utils["chat-messages"].messages;
+  
+    if (!messages || messages.length === 0) return;
+  
     if (config.utils["chat-messages"].repeat) {
-      let i = 0;
+      let lastIndex = -1;
+  
       addInterval(() => {
         if (bot && botState.connected) {
-          bot.chat(messages[i]);
+  
+          let randomIndex;
+  
+          // Avoid sending same message twice in a row
+          do {
+            randomIndex = Math.floor(Math.random() * messages.length);
+          } while (messages.length > 1 && randomIndex === lastIndex);
+  
+          lastIndex = randomIndex;
+  
+          const msg = messages[randomIndex];
+          bot.chat(msg);
           botState.lastActivity = Date.now();
-          i = (i + 1) % messages.length;
         }
       }, config.utils["chat-messages"]["repeat-delay"]);
+  
     } else {
-      messages.forEach((msg, idx) => {
+      messages.forEach((msg) => {
         setTimeout(() => {
           if (bot && botState.connected) bot.chat(msg);
         }, idx);
