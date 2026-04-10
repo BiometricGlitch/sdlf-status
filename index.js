@@ -1324,12 +1324,12 @@ function createBot() {
         );
       }
 
-      log(`${username} joined the server`);
+      addLog(`${username} joined the server`);
 
       const messages = config.utils["chat-messages"].messages;
     
       if (!messages || messages.length === 0) {
-        log("No messages found in config.");
+        addLog("No messages found in config.");
         return;
       }
     
@@ -1337,7 +1337,7 @@ function createBot() {
       setTimeout(() => {
         const msg = messages[Math.floor(Math.random() * messages.length)];
         bot.chat(msg);
-        log(`Sent (join): ${msg}`);
+        addLog(`Sent (join): ${msg}`);
       }, 3000);
     
       // ✅ CLEAR OLD INTERVAL IF EXISTS (VERY IMPORTANT)
@@ -1351,7 +1351,7 @@ function createBot() {
     
         const msg = messages[Math.floor(Math.random() * messages.length)];
         bot.chat(msg);
-        log(`Sent: ${msg}`);
+        addLog(`Sent: ${msg}`);
       }, 10000);
 
       // FIX: use bot.version (auto-detected) instead of config value so minecraft-data always matches
