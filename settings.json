@@ -29,7 +29,7 @@
     "chat-messages": {
       "enabled": true,
       "repeat": true,
-      "repeat-delay": 10000,
+      "repeat-delay": 60000,
       "messages": [
         "Oy mga tropa, login na sa server",
         "Join na kayo sa STEMC squad, solid dito",
