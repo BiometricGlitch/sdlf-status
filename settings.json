@@ -29,7 +29,7 @@
     "chat-messages": {
       "enabled": true,
       "repeat": true,
-      "repeat-delay": 15000,
+      "repeat-delay": 10000,
       "messages": [
         "§aOy mga tropa, login na sa server",
         "§bJoin na kayo sa STEMC squad, solid dito",
@@ -141,7 +141,7 @@
     "circle-walk": {
       "enabled": true,
       "radius": 7,
-      "speed": 6000
+      "speed": 1000
     },
     "look-around": {
       "enabled": true,
@@ -149,7 +149,7 @@
     },
     "random-jump": {
       "enabled": true,
-      "interval": 3000
+      "interval": 2000
     }
   },
   "modules": {
