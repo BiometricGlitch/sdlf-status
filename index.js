@@ -1455,7 +1455,7 @@ function initializeModules(bot, mcData, defaultMove) {
           botState.lastActivity = Date.now();
           i = (i + 1) % messages.length;
         }
-      }, config.utils["chat-messages"]["repeat-delay"] * 1000);
+      }, config.utils["chat-messages"]["repeat-delay"]);
     } else {
       messages.forEach((msg, idx) => {
         setTimeout(() => {
