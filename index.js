@@ -1186,39 +1186,54 @@ function getReconnectDelay() {
 
 function generateUsername() {
   const prefixes = [
-    "Tropa", "Geng", "Pinoy", "Lods", "Astig", "Solid",
-    "Skibidi", "Wazzup", "Chill", "SanaAll", "Aral", "Break"
+    "Si", "Ang", "Kuya", "Ate", "Boss", "Lods",
+    "Tropa", "Geng", "Astig", "Solid", "Chill",
+    "Aral", "Tambay", "Kanto", "Barkada"
   ];
 
-  const cores = [
-    "Tambay", "Miner", "Builder", "Pvper", "Gamer",
-    "MissKonasya", "Lowkey", "Highkey", "Crush", "StudyFirst",
-    "AFK", "Grinder"
+  const names = [
+    "Jun", "Mark", "Jhay", "Jhon", "Josh",
+    "Kyle", "Ken", "Carl", "Ivan", "Renz",
+    "Migz", "Bry", "Sean", "Nico", "Paolo"
+  ];
+
+  const vibes = [
+    "Tambay", "Grind", "Miner", "Builder",
+    "Pvper", "Lowkey", "Highkey", "Crush",
+    "MissKonasya", "StudyFirst", "WalangTulugan",
+    "NoSleep", "Gamer", "Idle"
   ];
 
   const suffixes = [
-    "XD", "123", "PH", "GG", "Real", "Legit",
-    "NoCap", "FR", "Boss", "Main", "Alt"
+    "PH", "XD", "GG", "123", "Real",
+    "Legit", "Boss", "Alt", "Main", "FR"
   ];
 
   const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  let name =
-    rand(prefixes) +
-    rand(cores) +
-    (Math.random() > 0.5 ? rand(suffixes) : "");
+  // Pattern variations (para hindi halatang bot)
+  const patterns = [
+    () => rand(prefixes) + rand(names),
+    () => rand(names) + rand(vibes),
+    () => rand(prefixes) + rand(vibes),
+    () => rand(names) + "_" + rand(vibes),
+    () => rand(vibes) + rand(suffixes),
+    () => rand(prefixes) + rand(names) + rand(suffixes),
+    () => rand(names) + rand(suffixes),
+  ];
 
-  // Minecraft username rules (safe cleanup)
+  let name = rand(patterns)();
+
+  // Clean invalid chars
   name = name.replace(/[^a-zA-Z0-9_]/g, "");
 
-  // Limit to 16 chars
+  // Limit to 16 chars (Minecraft limit)
   if (name.length > 16) {
     name = name.substring(0, 16);
   }
 
   return name;
 }
-
 function createBot() {
   if (isReconnecting) {
     addLog("[Bot] Already reconnecting, skipping...");
@@ -1308,6 +1323,36 @@ function createBot() {
           0x4ade80,
         );
       }
+
+      log(`${username} joined the server`);
+
+      const messages = config.utils["chat-messages"].messages;
+    
+      if (!messages || messages.length === 0) {
+        log("No messages found in config.");
+        return;
+      }
+    
+      // ✅ SEND ONE MESSAGE IMMEDIATELY (after small delay)
+      setTimeout(() => {
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        bot.chat(msg);
+        log(`Sent (join): ${msg}`);
+      }, 3000);
+    
+      // ✅ CLEAR OLD INTERVAL IF EXISTS (VERY IMPORTANT)
+      if (bot._chatInterval) {
+        clearInterval(bot._chatInterval);
+      }
+    
+      // ✅ SPAM EVERY 10 SECONDS (randomized messages)
+      bot._chatInterval = setInterval(() => {
+        if (!bot || !bot.player) return;
+    
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        bot.chat(msg);
+        log(`Sent: ${msg}`);
+      }, 10000);
 
       // FIX: use bot.version (auto-detected) instead of config value so minecraft-data always matches
       const mcData = require("minecraft-data")(bot.version);
