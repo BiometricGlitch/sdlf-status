@@ -1184,6 +1184,41 @@ function getReconnectDelay() {
   return delay + jitter;
 }
 
+function generateUsername() {
+  const prefixes = [
+    "Tropa", "Geng", "Pinoy", "Lods", "Astig", "Solid",
+    "Skibidi", "Wazzup", "Chill", "SanaAll", "Aral", "Break"
+  ];
+
+  const cores = [
+    "Tambay", "Miner", "Builder", "Pvper", "Gamer",
+    "MissKonasya", "Lowkey", "Highkey", "Crush", "StudyFirst",
+    "AFK", "Grinder"
+  ];
+
+  const suffixes = [
+    "XD", "123", "PH", "GG", "Real", "Legit",
+    "NoCap", "FR", "Boss", "Main", "Alt"
+  ];
+
+  const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  let name =
+    rand(prefixes) +
+    rand(cores) +
+    (Math.random() > 0.5 ? rand(suffixes) : "");
+
+  // Minecraft username rules (safe cleanup)
+  name = name.replace(/[^a-zA-Z0-9_]/g, "");
+
+  // Limit to 16 chars
+  if (name.length > 16) {
+    name = name.substring(0, 16);
+  }
+
+  return name;
+}
+
 function createBot() {
   if (isReconnecting) {
     addLog("[Bot] Already reconnecting, skipping...");
@@ -1212,8 +1247,14 @@ function createBot() {
       config.server.version && config.server.version.trim() !== ""
         ? config.server.version
         : false;
+
+    const randomUsername = generateUsername();
+
+    addLog(`[Session] Generated username: ${randomUsername}`);
+    
     bot = mineflayer.createBot({
-      username: config["bot-account"].username,
+      // username: config["bot-account"].username,
+      username: randomUsername,
       password: config["bot-account"].password || undefined,
       auth: config["bot-account"].type,
       host: config.server.ip,
