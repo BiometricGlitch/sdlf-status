@@ -1184,56 +1184,57 @@ function getReconnectDelay() {
   return delay + jitter;
 }
 
-function generateUsername() {
-  const prefixes = [
-    "Si", "Ang", "Kuya", "Ate", "Boss", "Lods",
-    "Tropa", "Geng", "Astig", "Solid", "Chill",
-    "Aral", "Tambay", "Kanto", "Barkada"
-  ];
+// function generateUsername() {
+//   const prefixes = [
+//     "Si", "Ang", "Kuya", "Ate", "Boss", "Lods",
+//     "Tropa", "Geng", "Astig", "Solid", "Chill",
+//     "Aral", "Tambay", "Kanto", "Barkada"
+//   ];
 
-  const names = [
-    "Jun", "Mark", "Jhay", "Jhon", "Josh",
-    "Kyle", "Ken", "Carl", "Ivan", "Renz",
-    "Migz", "Bry", "Sean", "Nico", "Paolo"
-  ];
+//   const names = [
+//     "Jun", "Mark", "Jhay", "Jhon", "Josh",
+//     "Kyle", "Ken", "Carl", "Ivan", "Renz",
+//     "Migz", "Bry", "Sean", "Nico", "Paolo"
+//   ];
 
-  const vibes = [
-    "Tambay", "Grind", "Miner", "Builder",
-    "Pvper", "Lowkey", "Highkey", "Crush",
-    "MissKonasya", "StudyFirst", "WalangTulugan",
-    "NoSleep", "Gamer", "Idle"
-  ];
+//   const vibes = [
+//     "Tambay", "Grind", "Miner", "Builder",
+//     "Pvper", "Lowkey", "Highkey", "Crush",
+//     "MissKonasya", "StudyFirst", "WalangTulugan",
+//     "NoSleep", "Gamer", "Idle"
+//   ];
 
-  const suffixes = [
-    "PH", "XD", "GG", "123", "Real",
-    "Legit", "Boss", "Alt", "Main", "FR"
-  ];
+//   const suffixes = [
+//     "PH", "XD", "GG", "123", "Real",
+//     "Legit", "Boss", "Alt", "Main", "FR"
+//   ];
 
-  const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+//   const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  // Pattern variations (para hindi halatang bot)
-  const patterns = [
-    () => rand(prefixes) + rand(names),
-    () => rand(names) + rand(vibes),
-    () => rand(prefixes) + rand(vibes),
-    () => rand(names) + "_" + rand(vibes),
-    () => rand(vibes) + rand(suffixes),
-    () => rand(prefixes) + rand(names) + rand(suffixes),
-    () => rand(names) + rand(suffixes),
-  ];
+//   // Pattern variations (para hindi halatang bot)
+//   const patterns = [
+//     () => rand(prefixes) + rand(names),
+//     () => rand(names) + rand(vibes),
+//     () => rand(prefixes) + rand(vibes),
+//     () => rand(names) + "_" + rand(vibes),
+//     () => rand(vibes) + rand(suffixes),
+//     () => rand(prefixes) + rand(names) + rand(suffixes),
+//     () => rand(names) + rand(suffixes),
+//   ];
 
-  let name = rand(patterns)();
+//   let name = rand(patterns)();
 
-  // Clean invalid chars
-  name = name.replace(/[^a-zA-Z0-9_]/g, "");
+//   // Clean invalid chars
+//   name = name.replace(/[^a-zA-Z0-9_]/g, "");
 
-  // Limit to 16 chars (Minecraft limit)
-  if (name.length > 16) {
-    name = name.substring(0, 16);
-  }
+//   // Limit to 16 chars (Minecraft limit)
+//   if (name.length > 16) {
+//     name = name.substring(0, 16);
+//   }
 
-  return name;
-}
+//   return name;
+// }
+
 function createBot() {
   if (isReconnecting) {
     addLog("[Bot] Already reconnecting, skipping...");
