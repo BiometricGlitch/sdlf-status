@@ -1885,6 +1885,7 @@ function chatModule(bot) {
       if (config.chat && config.chat.respond) {
         const lowerMsg = message.toLowerCase();
         if (lowerMsg.includes("hello") || lowerMsg.includes("hi")) {
+          if(username === "GlydeX" || username === "BrookylnMC" || username === "BrooklynOP" || username === "jellyous") return;
           bot.chat(`Hello, ${username}!`);
         }
         if (message.startsWith("!tp ")) {
