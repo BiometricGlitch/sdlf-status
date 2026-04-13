@@ -168,12 +168,12 @@
     "place-night": false
   },
   "discord": {
-    "enabled": false,
-    "webhookUrl": "YOUR_DISCORD_WEBHOOK_URL_HERE",
+    "enabled": true,
+    "webhookUrl": "https://discord.com/api/webhooks/1493225796481974444/v7foX7VuMlU6ZVCwLQN0LmNS2X93Toyx3QdK-n1J9Hcgqq3gl0Bhp7G1pmsayqf2XVXM",
     "events": {
       "connect": true,
       "disconnect": true,
-      "chat": false
+      "chat": true
     }
   },
   "chat": {
