@@ -1184,7 +1184,27 @@ function getReconnectDelay() {
   return delay + jitter;
 }
 
+function isActiveTime() {
+  const now = new Date();
+
+  // Convert to Manila time
+  const manila = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Manila" })
+  );
+
+  const hour = manila.getHours();
+
+  // Active from 15:00 (3PM) to 03:00 (2AM)
+  return hour >= 15 || hour < 3;
+}
+
 function createBot() {
+  if (!isActiveTime()) {
+    log("Outside active hours. Waiting...");
+    scheduleReconnect(60000); // check again in 1 min
+    return;
+  }
+  
   if (isReconnecting) {
     addLog("[Bot] Already reconnecting, skipping...");
     return;
