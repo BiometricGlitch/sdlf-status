@@ -1184,24 +1184,45 @@ function getReconnectDelay() {
   return delay + jitter;
 }
 
+/**
+ * Checks if the current time in Manila (UTC+8) is within active hours (15:00 - 02:59).
+ * @returns {boolean} True if active, False if the bot should be offline.
+ */
 function isActiveTime() {
   const now = new Date();
 
-  // Convert to Manila time
+  // Convert to Manila time (UTC+8)
   const manila = new Date(
     now.toLocaleString("en-US", { timeZone: "Asia/Manila" })
   );
 
   const hour = manila.getHours();
 
-  // Active from 15:00 (3PM) to 03:00 (2AM)
+  // Active from 15:00 (3PM) to 03:00 (3AM)
   return hour >= 15 || hour < 3;
 }
 
+// Background check: kick the bot if it's currently online when 3:00 AM hits.
+setInterval(() => {
+  if (bot && botState.connected && !isActiveTime()) {
+    addLog("[Schedule] It is now 3:00 AM Manila Time. Automatically disconnecting...");
+    // End the bot and clear states so it doesn't try to reconnect until 3:00 PM.
+    bot.end();
+    bot = null;
+    clearAllIntervals();
+    botState.connected = false;
+    
+    if (config.discord && config.discord.enabled) {
+      sendDiscordWebhook("🌙 **Shift Ended**: It is 3:00 AM. Bot is sleeping until 3:00 PM.", 0x5865F2);
+    }
+  }
+}, 60000); // Check every minute.
+
 function createBot() {
+  // Check if we are allowed to be online right now
   if (!isActiveTime()) {
-    log("Outside active hours. Waiting...");
-    scheduleReconnect(60000); // check again in 1 min
+    addLog("[Schedule] Outside active hours (3PM - 3AM Manila). Waiting for 3:00 PM...");
+    scheduleReconnect(300000); // Wait 5 minutes before checking the clock again.
     return;
   }
   
@@ -1387,7 +1408,11 @@ function createBot() {
   }
 }
 
-function scheduleReconnect() {
+/**
+ * Schedules the bot to reconnect after a calculated or custom delay.
+ * @param {number} customDelay - Optional fixed delay in ms (used when waiting for 3 PM).
+ */
+function scheduleReconnect(customDelay = null) {
   clearBotTimeouts();
 
   // FIX: don't stack reconnect if already waiting
@@ -1399,10 +1424,14 @@ function scheduleReconnect() {
   isReconnecting = true;
   botState.reconnectAttempts++;
 
-  const delay = getReconnectDelay();
-  addLog(
-    `[Bot] Reconnecting in ${delay / 1000}s (attempt #${botState.reconnectAttempts})`,
-  );
+  // Use the custom delay (e.g., 5 mins) if outside active hours, otherwise use exponential delay.
+  const delay = customDelay || getReconnectDelay();
+  
+  if (!customDelay) {
+    addLog(
+      `[Bot] Reconnecting in ${delay / 1000}s (attempt #${botState.reconnectAttempts})`,
+    );
+  }
 
   reconnectTimeoutId = setTimeout(() => {
     reconnectTimeoutId = null;
@@ -1495,7 +1524,7 @@ function initializeModules(bot, mcData, defaultMove) {
       messages.forEach((msg) => {
         setTimeout(() => {
           if (bot && botState.connected) bot.chat(msg);
-        }, idx);
+        }, 1000);
       });
     }
   }
